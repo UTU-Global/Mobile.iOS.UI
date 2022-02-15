@@ -22,6 +22,7 @@ public class UTUSnackBar : NSObject { //MDCSnackbarManagerDelegate
     static var snackbarTitleLblHeight : CGFloat!
     static var defaultManager : MDCSnackbarManager!
     static var snackbarTitleLbl : UILabel!
+        static var timer = Timer()
     //Singleton Implementation
     private static let sharedInstance:UTUSnackBar = {
         let instance = UTUSnackBar ()
@@ -29,6 +30,7 @@ public class UTUSnackBar : NSObject { //MDCSnackbarManagerDelegate
     } ()
     
     public static func showSnackbar(title: String){
+         timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(closeAction), userInfo: nil, repeats: false)
         self.showSnackbar(title: title, forSuccess: false)
     }
     public static func showSnackbar(title: String, forSuccess : Bool, bgColor: UIColor? = UIColor(red: 245/255, green: 245/255, blue: 245/255, alpha: 1), titleColor: UIColor? = .black, borderColor:UIColor? = UIColor(red: 213/255, green: 213/255, blue: 213/255, alpha: 1)) {
@@ -36,6 +38,7 @@ public class UTUSnackBar : NSObject { //MDCSnackbarManagerDelegate
         if snackbar != nil {
             snackbar.dismiss()
         }
+         timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(closeAction), userInfo: nil, repeats: false)
         let snackbarTitle = title
         snackbar = TTGSnackbar(message: title, duration: .forever)
         snackbar.layer.shadowOpacity = 0
@@ -115,6 +118,7 @@ public class UTUSnackBar : NSObject { //MDCSnackbarManagerDelegate
         snackbarTitleLbl.addGestureRecognizer(tapGestureRecognizer)
     }
     @objc static func closeAction() {
+        UTUSnackBar.timer.invalidate()
         UTUSnackBar.snackbar.dismiss()
     }
     @objc static func moreAction() {
