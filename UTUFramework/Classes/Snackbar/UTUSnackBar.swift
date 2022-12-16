@@ -21,6 +21,7 @@ public class UTUSnackBar : NSObject, MDCSnackbarManagerDelegate {
     static var snackbarTitleLblHeight : CGFloat!
     static var defaultManager : MDCSnackbarManager!
     var snackbarTitleLbl : UILabel!
+    var timer = Timer()
     //Singleton Implementation
     private static let sharedInstance:UTUSnackBar = {
         let instance = UTUSnackBar ()
@@ -28,6 +29,7 @@ public class UTUSnackBar : NSObject, MDCSnackbarManagerDelegate {
     } ()
     
     public static func showSnackbar(title: String){
+        timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(closeAction), userInfo: nil, repeats: false)
         self.showSnackbar(title: title, forSuccess: false)
     }
     public static func showSnackbar(title: String, forSuccess : Bool){
@@ -51,6 +53,7 @@ public class UTUSnackBar : NSObject, MDCSnackbarManagerDelegate {
         }else{
             defaultManager.setBottomOffset(UIScreen.main.bounds.height - 85)
         }
+        timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(closeAction), userInfo: nil, repeats: false)
         defaultManager.alignment = .center
         defaultManager.shouldApplyStyleChangesToVisibleSnackbars = true
         defaultManager.messageTextColor = .black
@@ -142,6 +145,7 @@ public class UTUSnackBar : NSObject, MDCSnackbarManagerDelegate {
     @objc func closeAction(){
         //todo
         //messageInfinite.isNeedToDismiss = true
+        UTUSnackBar.timer.invalidate()
         DispatchQueue.main.async {
             self.customMessageView.isUserInteractionEnabled = false
             MDCSnackbarManager.dismissAndCallCompletionBlocks(withCategory: "infinite")
