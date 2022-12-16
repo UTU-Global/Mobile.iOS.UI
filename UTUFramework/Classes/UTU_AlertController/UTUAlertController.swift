@@ -25,8 +25,6 @@ public class UTUAlertController: UIViewController {
     public var delegate: UTUAlertViewDelegate?
     public var titleStr : String?
     public var titleTextColor : UIColor?
-    public var messageTextColor : UIColor?
-
     public var okBtnTitleColor : UIColor?
     public var cancelBtnTitleColor : UIColor?
     public var okBtnBgColor : UIColor?
@@ -36,12 +34,10 @@ public class UTUAlertController: UIViewController {
     public var messageStr : String?
     public var okStr : String?
     public var cancelStr : String?
-    public var isOkButtonHidden : Bool?
-    public var isCancelButtonHidden : Bool?
     public var descHeight = 85
     public var titleFont : UIFont?
     let alertViewGrayColor = UIColor(red: 224.0/255.0, green: 224.0/255.0, blue: 224.0/255.0, alpha: 1)
-
+    public var alertViewBgColor: UIColor?
     override public func viewDidLoad() {
         super.viewDidLoad()
         okBtn.layer.cornerRadius = 3.0
@@ -60,9 +56,14 @@ public class UTUAlertController: UIViewController {
             self.titleLbl.text = titleString
         }
         if let message = messageStr {
-            self.messageLbl.text = message
             let messageHeight = heightForView(text: message, font: UIFont(name: "NotoSans", size: 14)!, width: UIScreen.main.bounds.width - 82)
-            self.alertViewHeight.constant = messageHeight + 150
+            self.messageLbl.text = message
+            if titleStr == nil || titleStr!.isEmpty {
+                self.messageToTop.constant = 20
+                self.alertViewHeight.constant = messageHeight + 80
+            } else {
+                self.alertViewHeight.constant = messageHeight + 150
+            }
             self.messageHeight.constant = CGFloat(messageHeight)
         }
 
@@ -94,14 +95,8 @@ public class UTUAlertController: UIViewController {
             okBtn.layer.borderColor = tempBorderColor.cgColor
             cancelBtn.layer.borderColor = tempBorderColor.cgColor
         }
-        if let status = isOkButtonHidden {
-            okBtn.isHidden = status
-        }
-        if let status = isCancelButtonHidden {
-            cancelBtn.isHidden = status
-        }
-        if let messageTextColor = self.messageTextColor {
-            self.messageLbl.textColor = messageTextColor
+        if let alertBgColor = self.alertViewBgColor {
+            self.alertView.backgroundColor = alertBgColor
         }
     }
     private func heightForView(text:String, font:UIFont, width:CGFloat) -> CGFloat {
@@ -145,23 +140,11 @@ public class UTUAlertController: UIViewController {
     }
     
     @IBAction func onTapCancelButton(_ sender: UIButton) {
-        okBtn.backgroundColor = .white
-        okBtn.layer.borderColor = tintColor.cgColor
-        okBtn.setTitleColor(tintColor, for: .normal)
-        sender.backgroundColor = tintColor
-        sender.setTitleColor(.white, for: .normal)
         delegate?.cancelButtonTapped()
-       // self.dismiss(animated: true, completion: nil)
     }
     
     @IBAction func onTapOkButton(_ sender: UIButton) {
-        cancelBtn.backgroundColor = .white
-        cancelBtn.layer.borderColor = tintColor.cgColor
-        cancelBtn.setTitleColor(tintColor, for: .normal)
-        sender.setTitleColor(.white, for: .normal)
-        sender.backgroundColor = tintColor
         delegate?.okButtonTapped()
-        //self.dismiss(animated: true, completion: nil)
     }
  
 }
