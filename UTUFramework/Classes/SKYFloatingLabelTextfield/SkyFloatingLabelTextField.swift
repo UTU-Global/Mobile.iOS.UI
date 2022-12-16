@@ -35,6 +35,8 @@ open class SkyFloatingLabelTextField: UITextField , UITextFieldDelegate{ // swif
     let paddingEditing = UIEdgeInsets(top: 5, left: 16, bottom: 5, right: 50)
     var clearBtn : UIButton!
     public var isPasswordViewEnable : Bool = false
+    public var isClearBtnRequired : Bool = true
+
 //    var passwordMaskBtn : UIButton!
     let maskLayer = CAShapeLayer()
     let borderLayer = CAShapeLayer()
@@ -435,10 +437,12 @@ open class SkyFloatingLabelTextField: UITextField , UITextFieldDelegate{ // swif
         self.titleLabel = titleLabel
         
         
-        let clearBtn = UIButton()
-        addSubview(clearBtn)
-        self.clearBtn = clearBtn
-        self.clearBtn.isHidden = true
+        if isClearBtnRequired {
+            let clearBtn = UIButton()
+            addSubview(clearBtn)
+            self.clearBtn = clearBtn
+            self.clearBtn.isHidden = true
+        }
         
 //        let passwordMaskBtn = UIButton()
 //        addSubview(passwordMaskBtn)
@@ -701,8 +705,12 @@ open class SkyFloatingLabelTextField: UITextField , UITextFieldDelegate{ // swif
                 self.clearBtn.setImage(image, for: .normal)
                 self.clearBtn.imageView?.contentMode = .scaleToFill
                 self.clearBtn.addTarget(self, action: #selector(self.clearBtnClicked(sender:)), for: .touchUpInside)
-                self.bringSubviewToFront(self.clearBtn)
-                self.clearBtn.isHidden = true
+                if self.isClearBtnRequired {
+                    self.bringSubviewToFront(self.clearBtn)
+                } else {
+                    self.clearBtn.removeFromSuperview()
+                }
+             self.clearBtn.isHidden = true
             }
         }
         if animated {
