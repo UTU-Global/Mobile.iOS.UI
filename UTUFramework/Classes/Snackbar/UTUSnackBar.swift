@@ -40,7 +40,7 @@ public class UTUSnackBar : NSObject { //MDCSnackbarManagerDelegate
         }
         timer = Timer.scheduledTimer(timeInterval: 3, target: self, selector: #selector(closeAction), userInfo: nil, repeats: false)
         let snackbarTitle = title
-        snackbar = TTGSnackbar(message: title, duration: .forever)
+        snackbar = TTGSnackbar(message: "", duration: .forever)
         snackbar.layer.shadowOpacity = 0
         snackbar.layer.shadowRadius = 0
         snackbar.layer.shadowColor = borderColor?.cgColor
